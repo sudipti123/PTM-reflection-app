@@ -155,7 +155,13 @@
             </button>
         </div>
 
-        <div id="questions-page" class="hidden">
+        <div id="questions-page" class="hidden relative">
+            <!-- New Back Button added here -->
+            <button id="back-to-landing-btn" class="absolute -top-4 -left-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
             <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Your Reflection</h2>
             <p class="text-center text-gray-500 mb-6">Select the option that feels most true to you.</p>
             
@@ -313,6 +319,8 @@
             const modalMessage = document.getElementById('modal-message');
             const modalCloseBtn = document = document.getElementById('modal-close-btn');
             const backBtn = document.getElementById('back-btn');
+            // New button reference
+            const backToLandingBtn = document.getElementById('back-to-landing-btn');
             const progressBar = document.getElementById('progress-bar');
             const allRadioButtons = document.querySelectorAll('input[type="radio"]');
 
@@ -360,9 +368,23 @@
                 progressBar.style.width = `${progressPercentage}%`;
             }
 
+            /**
+             * Resets the state of the questions and progress bar.
+             */
+            function resetQuestions() {
+                allRadioButtons.forEach(radio => radio.checked = false);
+                updateProgress();
+            }
+
             // Event Listeners
             startBtn.addEventListener('click', () => {
                 showPage(questionsPage, [landingPage, responsePage]);
+            });
+
+            // Added a new event listener for the new back button
+            backToLandingBtn.addEventListener('click', () => {
+                resetQuestions(); // Reset questions before navigating back
+                showPage(landingPage, [questionsPage, responsePage]);
             });
 
             insightsBtn.addEventListener('click', () => {
@@ -388,12 +410,7 @@
             });
 
             backBtn.addEventListener('click', () => {
-                // Uncheck all radio buttons for a fresh start
-                allRadioButtons.forEach(radio => radio.checked = false);
-                
-                // Reset progress bar
-                updateProgress();
-                
+                resetQuestions();
                 showPage(questionsPage, [responsePage, landingPage]);
             });
 
